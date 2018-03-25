@@ -12,9 +12,11 @@ RUN         apt-get update && apt-get install -y \
 
 FROM        debian:stretch-slim
 
-# RUN         apt-get update && apt-get install -y \
-#               fuse \
-#               ca-certificates
+RUN         apt-get update && apt-get install -y \
+              fuse \
+              ca-certificates && \
+            apt-get clean -y && \
+            rm -rf /var/lib/apt/lists/*
 
 COPY        --from=builder /usr/local/bin/gcsfuse /usr/local/bin/gcsfuse
 
