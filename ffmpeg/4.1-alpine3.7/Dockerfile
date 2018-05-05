@@ -1,6 +1,6 @@
 FROM    	alpine:3.7 as builder
 
-ENV     	VERSION 3.4.2
+ENV     	VERSION n4.1-dev
 
 RUN     	apk add --no-cache --virtual .build-deps \
 						build-base curl \
@@ -61,4 +61,4 @@ RUN			apk add --no-cache --virtual .run-deps \
 
 COPY		--from=builder /usr/local /usr/local
 
-# ENTRYPOINT	["ffmpeg"]
+ENTRYPOINT	["ffmpeg"]
