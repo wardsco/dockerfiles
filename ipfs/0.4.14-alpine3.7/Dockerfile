@@ -5,20 +5,18 @@ ENV         IPFS_GX_USE_GLOBAL=1
 
 RUN         apk add --no-cache --virtual .build-deps \
                 build-base \
-                git && \
+                git
 
             # Get source
-            mkdir -p $GOPATH/src/github.com/ipfs && \
-            git clone --depth 1 --branch v$VERSION https://github.com/ipfs/go-ipfs $GOPATH/src/github.com/ipfs/go-ipfs && \
+RUN         mkdir -p $GOPATH/src/github.com/ipfs && \
+            git clone --depth 1 --branch v$VERSION https://github.com/ipfs/go-ipfs $GOPATH/src/github.com/ipfs/go-ipfs
 
             # Replace g, gx-go
-            ( \
-                cd $GOPATH/src/github.com/ipfs/go-ipfs && \
-                go get -v -u github.com/whyrusleeping/gx github.com/whyrusleeping/gx-go && \
-                rm -rf bin/gx bin/gx-go && \
-                ln -s $(which gx) bin/gx && \
-                ln -s $(which gx-go) bin/gx-go
-            )
+RUN         cd $GOPATH/src/github.com/ipfs/go-ipfs && \
+            go get -v -u github.com/whyrusleeping/gx github.com/whyrusleeping/gx-go && \
+            rm -rf bin/gx bin/gx-go && \
+            ln -s $(which gx) bin/gx && \
+            ln -s $(which gx-go) bin/gx-go
 
 RUN         cd $GOPATH/src/github.com/ipfs/go-ipfs && \
             make build

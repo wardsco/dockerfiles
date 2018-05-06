@@ -5,23 +5,21 @@ ENV         IPFS_GX_USE_GLOBAL=1
 
 RUN         apk add --no-cache --virtual .build-deps \
                 build-base \
-                git && \
+                git
 
             # Get source
-            mkdir -p $GOPATH/src/github.com/ipfs && \
-            git clone --depth 1 --branch v$VERSION https://github.com/ipfs/ipfs-cluster $GOPATH/src/github.com/ipfs/ipfs-cluster && \
+RUN         mkdir -p $GOPATH/src/github.com/ipfs && \
+            git clone --depth 1 --branch v$VERSION https://github.com/ipfs/ipfs-cluster $GOPATH/src/github.com/ipfs/ipfs-cluster
 
             # Replace g, gx-go
             # Disable Makefile gx, gx-go installation
-            ( \
-                cd $GOPATH/src/github.com/ipfs/ipfs-cluster && \
-                go get -v -u github.com/whyrusleeping/gx github.com/whyrusleeping/gx-go && \
-                sed -i 's/gx:.*/gx:/' Makefile && \
-                mkdir -p deptools && \
-                rm -rf deptools/gx_* deptools/gx-go_* && \
-                ln -s $(which gx) deptools/gx_$(cat Makefile | grep gx_version= | tr '=' ' ' | awk '{print $2}') && \
-                ln -s $(which gx-go) deptools/gx-go_$(cat Makefile | grep gx-go_version= | tr '=' ' ' | awk '{print $2}') \
-            )
+RUN         cd $GOPATH/src/github.com/ipfs/ipfs-cluster && \
+            go get -v -u github.com/whyrusleeping/gx github.com/whyrusleeping/gx-go && \
+            sed -i 's/gx:.*/gx:/' Makefile && \
+            mkdir -p deptools && \
+            rm -rf deptools/gx_* deptools/gx-go_* && \
+            ln -s $(which gx) deptools/gx_$(cat Makefile | grep gx_version= | tr '=' ' ' | awk '{print $2}') && \
+            ln -s $(which gx-go) deptools/gx-go_$(cat Makefile | grep gx-go_version= | tr '=' ' ' | awk '{print $2}')
 
             # Build
 RUN         cd $GOPATH/src/github.com/ipfs/ipfs-cluster && \
