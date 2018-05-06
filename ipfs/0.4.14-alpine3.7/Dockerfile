@@ -36,11 +36,6 @@ EXPOSE      5001
 EXPOSE      8080
 EXPOSE      8081
 
-# Expose the fs-repo as a volume.
-# start_ipfs initializes an fs-repo if none is mounted.
-# Important this happens after the USER directive so permission are correct.
-VOLUME      $IPFS_PATH
-
 # This just makes sure that:
 # 1. There's an fs-repo, and initializes one if there isn't.
 # 2. The API and Gateway are accessible from outside the container.
@@ -59,6 +54,11 @@ RUN         apk add --no-cache --virtual .run-deps \
             adduser -D -h $IPFS_PATH -u 1000 -G users ipfs && \
             addgroup ipfs fuse
             chown ipfs:users $IPFS_PATH /ipfs /ipns
+
+# Expose the fs-repo as a volume.
+# start_ipfs initializes an fs-repo if none is mounted.
+# Important this happens after the USER directive so permission are correct.
+VOLUME      $IPFS_PATH
 
 COPY        --from=builder /go/src/github.com/ipfs/go-ipfs/cmd/ipfs/ipfs /usr/local/bin/ipfs
 COPY        --from=builder /go/src/github.com/ipfs/go-ipfs/bin/container_daemon /usr/local/bin/start_ipfs

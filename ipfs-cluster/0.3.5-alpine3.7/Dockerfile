@@ -24,8 +24,8 @@ RUN         cd $GOPATH/src/github.com/ipfs/ipfs-cluster && \
             # Build
 RUN         cd $GOPATH/src/github.com/ipfs/ipfs-cluster && \
             make build && \
-            mv ipfs-cluster-ctl/ipfs-cluster-ctl $GOPATH/bin && \
-            mv ipfs-cluster-service/ipfs-cluster-service $GOPATH/bin
+            mv ipfs-cluster-ctl/ipfs-cluster-ctl $GOPATH/bin/ipfs-cluster-ctl && \
+            mv ipfs-cluster-service/ipfs-cluster-service $GOPATH/bin/ipfs-cluster-service
 
 ###
 
@@ -38,11 +38,9 @@ EXPOSE      9094
 EXPOSE      9095
 EXPOSE      9096
 
-VOLUME      $IPFS_CLUSTER_PATH
-
 ENTRYPOINT  ["tini", "--", "/usr/local/bin/entrypoint.sh"]
             # Execute the daemon subcommand by default
-CMD         ["daemon", "--migrate=true"]
+CMD         ["daemon", "--upgrade"]
 
 RUN         apk add --no-cache --virtual .run-deps \
                 ca-certificates \
@@ -52,6 +50,8 @@ RUN         apk add --no-cache --virtual .run-deps \
             adduser -D -h $IPFS_CLUSTER_PATH -u 1000 -G users ipfs && \
             chown ipfs:users $IPFS_CLUSTER_PATH
 
-COPY        --from=builder $GOPATH/bin/ipfs-cluster-service /usr/local/bin/ipfs-cluster-service
-COPY        --from=builder $GOPATH/bin/ipfs-cluster-ctl /usr/local/bin/ipfs-cluster-ctl
-COPY        --from=builder $GOPATH/src/github.com/ipfs/ipfs-cluster/docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+VOLUME      $IPFS_CLUSTER_PATH
+
+COPY        --from=builder /go/bin/ipfs-cluster-ctl /usr/local/bin/ipfs-cluster-ctl
+COPY        --from=builder /go/bin/ipfs-cluster-service /usr/local/bin/ipfs-cluster-service
+COPY        --from=builder /go/src/github.com/ipfs/ipfs-cluster/docker/entrypoint.sh /usr/local/bin/entrypoint.sh
