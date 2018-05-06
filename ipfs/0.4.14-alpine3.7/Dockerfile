@@ -55,7 +55,9 @@ RUN         apk add --no-cache --virtual .run-deps \
                 su-exec \
                 fuse && \
             mkdir -p $IPFS_PATH /ipfs /ipns && \
+            addgroup fuse && \
             adduser -D -h $IPFS_PATH -u 1000 -G users ipfs && \
+            addgroup ipfs fuse
             chown ipfs:users $IPFS_PATH /ipfs /ipns
 
 COPY        --from=builder /go/src/github.com/ipfs/go-ipfs/cmd/ipfs/ipfs /usr/local/bin/ipfs
