@@ -52,7 +52,7 @@ RUN         apk add --no-cache --virtual .run-deps \
             mkdir -p $IPFS_PATH /ipfs /ipns && \
             addgroup fuse && \
             adduser -D -h $IPFS_PATH -u 1000 -G users ipfs && \
-            addgroup ipfs fuse
+            addgroup ipfs fuse && \
             chown ipfs:users $IPFS_PATH /ipfs /ipns
 
 # Expose the fs-repo as a volume.
