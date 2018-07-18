@@ -1,6 +1,6 @@
 FROM    	alpine:3.7 as ffmpeg
 
-ENV     	VERSION n4.1-dev
+ENV     	FFMPEG_VERSION n4.1-dev
 
 RUN     	apk add --no-cache --virtual .build-deps \
             build-base \
@@ -11,9 +11,9 @@ RUN     	apk add --no-cache --virtual .build-deps \
 	          rtmpdump-dev v4l-utils-dev yasm opus-dev x265-dev libass-dev \
 						libwebp-dev libxml2-dev
 
-RUN 	  	curl -sfL https://github.com/FFmpeg/FFmpeg/archive/$VERSION.tar.gz | tar xz
+RUN 	  	curl -sfL https://github.com/FFmpeg/FFmpeg/archive/$FFMPEG_VERSION.tar.gz | tar xz
 
-RUN 			cd FFmpeg-$VERSION && \
+RUN 			cd FFmpeg-$FFMPEG_VERSION && \
 					./configure \
             --prefix=/usr/local \
 						# --extra-cflags=-march=native \
