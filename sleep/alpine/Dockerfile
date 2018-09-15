@@ -1,5 +1,7 @@
-FROM          alpine
+FROM          alpine:3.8
 
-RUN           apk add --no-cache coreutils
 ENTRYPOINT    ["sh", "-c"]
 CMD           ["trap : TERM INT; sleep infinity & wait"]
+
+RUN           apk add --no-cache --virtual .run-deps \
+                coreutils
