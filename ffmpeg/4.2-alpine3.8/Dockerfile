@@ -1,6 +1,6 @@
-FROM    	alpine:3.7 as ffmpeg
+FROM    	alpine:3.8 as ffmpeg
 
-ENV     	FFMPEG_VERSION n4.1-dev
+ENV     	FFMPEG_VERSION n4.2-dev
 
 RUN     	apk add --no-cache --virtual .build-deps \
             build-base \
@@ -45,14 +45,15 @@ RUN 			cd FFmpeg-$FFMPEG_VERSION && \
 						--disable-static \
 						--enable-vaapi \
 						--enable-vdpau \
-						--enable-libopus && \
+						--enable-libopus \
+            --enable-libfreetype && \
           make -j$(nproc) && \
 		      # make doc/ffmpeg.1 doc/ffplay.1 doc/ffserver.1 && \
 		      make install install-man
 
 ###
 
-FROM		  alpine:3.7
+FROM		  alpine:3.8
 
 RUN       apk add --no-cache --virtual .run-deps \
             gnutls lame libvorbis xvidcore zlib libvdpau \
